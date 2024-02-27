@@ -7,18 +7,24 @@ const hashUserPassword = (password) => {
     return bcrypt.hashSync(password, salt);
 };
 
-const createNewUser = (email, password, username) => {
+const createNewUser = async (email, password, username) => {
     let hashPass = hashUserPassword(password);
 
-    connection.query(
-        'insert into users (email, password, username) values (?, ?, ?)',
-        [email, hashPass, username],
-        function (err, results, fields) {
-            if (err) {
-                console.log(err);
-            }
-        },
-    );
+    const connection = await mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        database: 'demo_jwt',
+    });
+
+    try {
+        const [results, fields] = await connection.query(
+            'insert into users (email, password, username) values (?, ?, ?)',
+            [email, hashPass, username],
+        );
+        return results;
+    } catch (err) {
+        console.log(err);
+    }
 };
 
 const getUserList = async () => {
@@ -29,18 +35,24 @@ const getUserList = async () => {
         database: 'demo_jwt',
     });
 
-    let users = [];
-    // connection.query('select * from users', [email, hashPass, username], function (err, results, fields) {
-    //     if (err) {
-    //         console.log(err);
-    //         return users;
-    //     }
-    //     users = results;
-    //     return users;
-    // });
-
     try {
         const [results, fields] = await connection.query('select * from users');
+        return results;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+const deleteUser = async (id) => {
+    // Create the connection to database
+    const connection = await mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        database: 'demo_jwt',
+    });
+
+    try {
+        const [results, fields] = await connection.query('delete from users where id = ?', [id]);
         return results;
     } catch (err) {
         console.log(err);
@@ -50,4 +62,5 @@ const getUserList = async () => {
 module.exports = {
     createNewUser,
     getUserList,
+    deleteUser,
 };
