@@ -14,11 +14,11 @@
                 <div class="edit-user-infor-container">
                     <form method="POST" action="/user/update-user">
                         <div class="mt-3"><h3>Update a new user:</h3></div>
-                        <input hidden value="<%=userData.id%>" name="id" />
+                        <input hidden value="<%=user.id%>" name="id" />
                         <div class="mb-3 col-6">
                             <label for="email" class="form-label">Email address</label>
                             <input
-                                value="<%=userData.email%>"
+                                value="<%=user.email%>"
                                 type="email"
                                 class="form-control"
                                 id="email"
@@ -31,7 +31,7 @@
                         <div class="mb-3 col-6">
                             <label for="username" class="form-label">Username</label>
                             <input
-                                value="<%=userData.username%>"
+                                value="<%=user.username%>"
                                 type="text"
                                 name="username"
                                 class="form-control"

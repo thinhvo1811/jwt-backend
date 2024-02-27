@@ -22,71 +22,89 @@ const createNewUser = async (email, password, username) => {
 };
 
 const getUserList = async () => {
-    // Create the connection to database
-    const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        database: 'demo_jwt',
-    });
+    let users = [];
+    users = await db.User.findAll();
+    return users;
+    // // Create the connection to database
+    // const connection = await mysql.createConnection({
+    //     host: 'localhost',
+    //     user: 'root',
+    //     database: 'demo_jwt',
+    // });
 
-    try {
-        const [results, fields] = await connection.query('select * from user');
-        return results;
-    } catch (err) {
-        console.log(err);
-    }
+    // try {
+    //     const [results, fields] = await connection.query('select * from user');
+    //     return results;
+    // } catch (err) {
+    //     console.log(err);
+    // }
 };
 
 const deleteUser = async (id) => {
-    // Create the connection to database
-    const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        database: 'demo_jwt',
+    await db.User.destroy({
+        where: { id },
     });
+    // // Create the connection to database
+    // const connection = await mysql.createConnection({
+    //     host: 'localhost',
+    //     user: 'root',
+    //     database: 'demo_jwt',
+    // });
 
-    try {
-        const [results, fields] = await connection.query('delete from user where id = ?', [id]);
-        return results;
-    } catch (err) {
-        console.log(err);
-    }
+    // try {
+    //     const [results, fields] = await connection.query('delete from user where id = ?', [id]);
+    //     return results;
+    // } catch (err) {
+    //     console.log(err);
+    // }
 };
 
 const getUserByID = async (id) => {
-    // Create the connection to database
-    const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        database: 'demo_jwt',
+    let user = {};
+    user = await db.User.findOne({
+        where: { id },
     });
+    return user;
+    // // Create the connection to database
+    // const connection = await mysql.createConnection({
+    //     host: 'localhost',
+    //     user: 'root',
+    //     database: 'demo_jwt',
+    // });
 
-    try {
-        const [results, fields] = await connection.query('select * from user where id = ?', [id]);
-        return results;
-    } catch (err) {
-        console.log(err);
-    }
+    // try {
+    //     const [results, fields] = await connection.query('select * from user where id = ?', [id]);
+    //     return results;
+    // } catch (err) {
+    //     console.log(err);
+    // }
 };
 
 const updateUser = async (email, username, id) => {
-    // Create the connection to database
-    const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        database: 'demo_jwt',
-    });
-
-    try {
-        const [results, fields] = await connection.query('update user set email = ?, username=? where id = ?', [
+    await db.User.update(
+        {
             email,
             username,
-            id,
-        ]);
-        return results;
-    } catch (err) {
-        console.log(err);
-    }
+        },
+        { where: { id } },
+    );
+    // // Create the connection to database
+    // const connection = await mysql.createConnection({
+    //     host: 'localhost',
+    //     user: 'root',
+    //     database: 'demo_jwt',
+    // });
+
+    // try {
+    //     const [results, fields] = await connection.query('update user set email = ?, username=? where id = ?', [
+    //         email,
+    //         username,
+    //         id,
+    //     ]);
+    //     return results;
+    // } catch (err) {
+    //     console.log(err);
+    // }
 };
 
 module.exports = {
