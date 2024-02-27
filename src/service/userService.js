@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import mysql from 'mysql2/promise';
+import db from '../models';
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -9,19 +10,12 @@ const hashUserPassword = (password) => {
 
 const createNewUser = async (email, password, username) => {
     let hashPass = hashUserPassword(password);
-
-    const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        database: 'demo_jwt',
-    });
-
     try {
-        const [results, fields] = await connection.query(
-            'insert into user (email, password, username) values (?, ?, ?)',
-            [email, hashPass, username],
-        );
-        return results;
+        await db.User.create({
+            username,
+            email,
+            password: hashPass,
+        });
     } catch (err) {
         console.log(err);
     }
