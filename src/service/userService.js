@@ -18,7 +18,7 @@ const createNewUser = async (email, password, username) => {
 
     try {
         const [results, fields] = await connection.query(
-            'insert into users (email, password, username) values (?, ?, ?)',
+            'insert into user (email, password, username) values (?, ?, ?)',
             [email, hashPass, username],
         );
         return results;
@@ -36,7 +36,7 @@ const getUserList = async () => {
     });
 
     try {
-        const [results, fields] = await connection.query('select * from users');
+        const [results, fields] = await connection.query('select * from user');
         return results;
     } catch (err) {
         console.log(err);
@@ -52,7 +52,7 @@ const deleteUser = async (id) => {
     });
 
     try {
-        const [results, fields] = await connection.query('delete from users where id = ?', [id]);
+        const [results, fields] = await connection.query('delete from user where id = ?', [id]);
         return results;
     } catch (err) {
         console.log(err);
@@ -68,7 +68,7 @@ const getUserByID = async (id) => {
     });
 
     try {
-        const [results, fields] = await connection.query('select * from users where id = ?', [id]);
+        const [results, fields] = await connection.query('select * from user where id = ?', [id]);
         return results;
     } catch (err) {
         console.log(err);
@@ -84,7 +84,7 @@ const updateUser = async (email, username, id) => {
     });
 
     try {
-        const [results, fields] = await connection.query('update users set email = ?, username=? where id = ?', [
+        const [results, fields] = await connection.query('update user set email = ?, username=? where id = ?', [
             email,
             username,
             id,
