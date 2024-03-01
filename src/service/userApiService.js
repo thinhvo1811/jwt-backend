@@ -36,8 +36,8 @@ const getUserWithPagination = async (page, limit) => {
         const { count, rows } = await db.User.findAndCountAll({
             offset,
             limit,
-            attributes: ['id', 'username', 'email', 'phone', 'sex'],
-            include: { model: db.Group, attributes: ['name', 'description'] },
+            attributes: ['id', 'username', 'email', 'phone', 'sex', 'address'],
+            include: { model: db.Group, attributes: ['name', 'description', 'id'] },
             order: [['id', 'DESC']],
         });
 
@@ -104,15 +104,42 @@ const createNewUser = async (data) => {
 
 const updateUser = async (data) => {
     try {
+        if (!data.groupId) {
+            return {
+                EM: 'Error with empty GroupId',
+                EC: 1,
+                DT: 'groupId',
+            };
+        }
         let user = await db.User.findOne({
             where: { id: data.id },
         });
         if (user) {
-            user.save({});
+            await user.update({
+                username: data.username,
+                address: data.address,
+                sex: data.sex,
+                groupId: data.groupId,
+            });
+            return {
+                EM: 'Update user successfully',
+                EC: 0,
+                DT: '',
+            };
         } else {
+            return {
+                EM: 'User not found',
+                EC: 2,
+                DT: '',
+            };
         }
     } catch (error) {
         console.log(error);
+        return {
+            EM: 'Something is wrong',
+            EC: 1,
+            DT: [],
+        };
     }
 };
 
